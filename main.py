@@ -96,7 +96,17 @@ async def ai_analyze(prompt: str, system: str = "") -> str:
                 }
             )
             resp.raise_for_status()
-            return resp.json()["choices"][0]["message"]["content"]
+            content = resp.json()["choices"][0]["message"]["content"]
+            # Strip markdown code blocks before returning
+            content = content.strip()
+            if content.startswith("```"):
+                lines = content.split("\n")
+                # Remove first line (```json or ```) and last line (```)
+                lines = lines[1:]
+                if lines and lines[-1].strip() == "```":
+                    lines = lines[:-1]
+                content = "\n".join(lines).strip()
+            return content
     except Exception:
         return _heuristic_response(prompt)
 
