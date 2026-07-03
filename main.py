@@ -186,7 +186,7 @@ async def sentiment_analysis(req: SentimentRequest):
         f"Provide: overall sentiment score (-1 to 1), sentiment breakdown by platform, "
         f"top 3 positive themes, top 3 negative themes, and trend direction (improving/stable/declining). "
         f"Return as JSON.",
-        system="You are a brand sentiment analyst. Return valid JSON only."
+        system="You are a brand sentiment analyst. Return ONLY raw JSON. No markdown, no code blocks, no explanations."
     )
     
     data = _parse_json_response(analysis)
@@ -212,7 +212,7 @@ async def trend_detection(req: TrendRequest):
         f"for region '{req.region}'. For each trend provide: topic name, "
         f"velocity score (1-10), estimated reach, why it's trending, and "
         f"recommended content angle. Return as JSON array.",
-        system="You are a trend analyst specializing in digital marketing. Return valid JSON only."
+        system="You are a trend analyst specializing in digital marketing. Return ONLY raw JSON. No markdown, no code blocks."
     )
     
     trends = _parse_json_response(analysis)
@@ -238,7 +238,7 @@ async def competitor_analysis(req: CompetitorRequest):
         f"Provide: likely target keywords (5-10), estimated ad spend tier (low/medium/high), "
         f"primary marketing channels, content themes, positioning strategy, "
         f"and 3 actionable recommendations to differentiate. Return as JSON.",
-        system="You are a competitive intelligence analyst for marketing teams. Return valid JSON only."
+        system="You are a competitive intelligence analyst for marketing teams. Return ONLY raw JSON. No markdown, no code blocks."
     )
     
     data = _parse_json_response(analysis)
@@ -265,7 +265,7 @@ async def content_gap_analysis(req: ContentGapRequest):
         f"For each gap provide: topic, estimated search volume tier (low/med/high), "
         f"difficulty score (1-10), recommended content format, and priority score (1-10). "
         f"Return as JSON array.",
-        system="You are an SEO and content strategy analyst. Return valid JSON only."
+        system="You are an SEO and content strategy analyst. Return ONLY raw JSON. No markdown, no code blocks."
     )
     
     gaps = _parse_json_response(analysis)
@@ -303,7 +303,7 @@ async def ad_copy_generation(req: AdCopyRequest):
         f"For each variation provide: headline, description, call_to_action, "
         f"target_keyword, and expected_appeal (emotional/rational/urgency/curiosity). "
         f"Return as JSON array.",
-        system=f"You are an expert copywriter for {req.platform} ads. Return valid JSON only."
+        system=f"You are an expert copywriter for {req.platform} ads. Return ONLY raw JSON array. No markdown, no code blocks, no explanations."
     )
     
     copies = _parse_json_response(analysis)
