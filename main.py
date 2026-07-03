@@ -1,5 +1,5 @@
 """
-MarketerOS — MCP-Powered Marketing Intelligence for AI Agents
+AgentServices Marketing — MCP-Powered Marketing Intelligence for AI Agents
 
 Built for the It's Today Media Build Challenge.
 The first marketing intelligence API designed specifically for AI agents,
@@ -25,7 +25,7 @@ from pydantic import BaseModel, Field
 # ============================================================================
 
 app = FastAPI(
-    title="MarketerOS",
+    title="AgentServices",
     description="MCP-Powered Marketing Intelligence for AI Agents",
     version="1.0.0",
     docs_url="/docs",
@@ -154,7 +154,7 @@ def _parse_json_response(text: str) -> any:
 @app.get("/")
 async def root():
     return {
-        "name": "MarketerOS",
+        "name": "AgentServices",
         "tagline": "Marketing Intelligence for AI Agents",
         "version": "1.0.0",
         "endpoints": [
@@ -172,7 +172,7 @@ async def root():
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "service": "MarketerOS", "build": "v2-fixed-json", "timestamp": datetime.utcnow().isoformat()}
+    return {"status": "ok", "service": "AgentServices Marketing", "build": "v2-fixed-json", "timestamp": datetime.utcnow().isoformat()}
 
 
 # --- 1. SENTIMENT ANALYSIS ---
@@ -329,7 +329,7 @@ async def mcp_manifest():
     """MCP server manifest — describes available tools for AI agents."""
     return {
         "server": {
-            "name": "MarketerOS",
+            "name": "AgentServices",
             "version": "1.0.0",
             "description": "Marketing intelligence for AI agents",
         },
