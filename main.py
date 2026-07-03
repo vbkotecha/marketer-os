@@ -7,6 +7,7 @@ with x402 micropayment support via USDC on Base.
 """
 
 import os
+import re
 import json
 import random
 import time
@@ -110,6 +111,32 @@ def _heuristic_response(prompt: str) -> str:
     })
 
 
+def _strip_markdown(text: str) -> str:
+    """Remove markdown code block wrappers from AI responses."""
+    text = text.strip()
+    if text.startswith("```"):
+        # Remove ```json or ``` prefix and trailing ```
+        text = re.sub(r'^```\w*\n?', '', text)
+        text = re.sub(r'\n?```$', '', text)
+    return text.strip()
+
+
+def _parse_json_response(text: str) -> any:
+    """Parse JSON from AI response, handling markdown and partial JSON."""
+    text = _strip_markdown(text)
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        # Try to extract JSON array or object from text
+        match = re.search(r'[\[\{].*[\]\}]', text, re.DOTALL)
+        if match:
+            try:
+                return json.loads(match.group())
+            except json.JSONDecodeError:
+                pass
+        return {"raw_analysis": text}
+
+
 # ============================================================================
 # ENDPOINTS — MARKETING INTELLIGENCE
 # ============================================================================
@@ -152,10 +179,7 @@ async def sentiment_analysis(req: SentimentRequest):
         system="You are a brand sentiment analyst. Return valid JSON only."
     )
     
-    try:
-        data = json.loads(analysis)
-    except:
-        data = {"raw_analysis": analysis}
+    data = _parse_json_response(analysis)
     
     return {
         "brand": req.brand,
@@ -181,10 +205,7 @@ async def trend_detection(req: TrendRequest):
         system="You are a trend analyst specializing in digital marketing. Return valid JSON only."
     )
     
-    try:
-        trends = json.loads(analysis)
-    except:
-        trends = [{"raw_analysis": analysis}]
+    trends = _parse_json_response(analysis)
     
     return {
         "industry": req.industry,
@@ -210,10 +231,7 @@ async def competitor_analysis(req: CompetitorRequest):
         system="You are a competitive intelligence analyst for marketing teams. Return valid JSON only."
     )
     
-    try:
-        data = json.loads(analysis)
-    except:
-        data = {"raw_analysis": analysis}
+    data = _parse_json_response(analysis)
     
     return {
         "competitor": req.competitor_url,
@@ -240,10 +258,7 @@ async def content_gap_analysis(req: ContentGapRequest):
         system="You are an SEO and content strategy analyst. Return valid JSON only."
     )
     
-    try:
-        gaps = json.loads(analysis)
-    except:
-        gaps = [{"raw_analysis": analysis}]
+    gaps = _parse_json_response(analysis)
     
     return {
         "your_domain": req.your_domain,
@@ -281,10 +296,7 @@ async def ad_copy_generation(req: AdCopyRequest):
         system=f"You are an expert copywriter for {req.platform} ads. Return valid JSON only."
     )
     
-    try:
-        copies = json.loads(analysis)
-    except:
-        copies = [{"raw_analysis": analysis}]
+    copies = _parse_json_response(analysis)
     
     return {
         "product": req.product,
