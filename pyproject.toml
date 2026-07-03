@@ -1,0 +1,15 @@
+[project]
+name = "marketer-os"
+version = "1.0.0"
+description = "MCP-Powered Marketing Intelligence for AI Agents"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "httpx>=0.28.0",
+    "pydantic>=2.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/vbkotecha/marketer-os"
+Documentation = "https://github.com/vbkotecha/marketer-os#readme"
