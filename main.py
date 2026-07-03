@@ -116,7 +116,7 @@ def _strip_markdown(text: str) -> str:
     text = text.strip()
     if text.startswith("```"):
         # Remove ```json or ``` prefix and trailing ```
-        text = re.sub(r'^```\w*\n?', '', text)
+        text = re.sub(r'^```[a-zA-Z]*\n?', '', text)
         text = re.sub(r'\n?```$', '', text)
     return text.strip()
 
@@ -162,7 +162,7 @@ async def root():
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "service": "MarketerOS", "timestamp": datetime.utcnow().isoformat()}
+    return {"status": "ok", "service": "MarketerOS", "build": "v2-fixed-json", "timestamp": datetime.utcnow().isoformat()}
 
 
 # --- 1. SENTIMENT ANALYSIS ---
